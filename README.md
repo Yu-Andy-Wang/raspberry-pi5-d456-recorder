@@ -108,15 +108,19 @@ This headless mode is recommended for unattended operation. It does not open a t
 For a visible terminal and `RealSense Depth` preview after graphical login, use desktop autostart instead:
 
 ```bash
-chmod +x scripts/enable_preview_autostart.sh scripts/run_preview.sh
-./scripts/enable_preview_autostart.sh
-sudo systemctl disable --now d456-monitor.service
+cd ~/raspberry-pi5-d456-recorder &&
+git pull --ff-only &&
+sudo systemctl disable --now d456-monitor.service &&
+bash scripts/enable_preview_autostart.sh
 ```
 
-Do not enable both modes at the same time. To switch back:
+The `scripts/` directory is in the repository, not in `~/python_code`. Desktop mode requires a graphical login; configure desktop automatic login with `sudo raspi-config` for unattended boot. See the [installation guide](docs/INSTALL.md#desktop-preview-mode) for verification steps.
+
+Do not enable both modes at the same time. Stop any running desktop recorder with `q` or `Ctrl+C` before switching back:
 
 ```bash
-./scripts/disable_preview_autostart.sh
+cd ~/raspberry-pi5-d456-recorder &&
+bash scripts/disable_preview_autostart.sh &&
 sudo systemctl enable --now d456-monitor.service
 ```
 

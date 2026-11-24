@@ -36,6 +36,7 @@ python3 --version
 ## 2. Clone This Repository
 
 ```bash
+cd ~
 git clone https://github.com/Yu-Andy-Wang/raspberry-pi5-d456-recorder.git
 cd raspberry-pi5-d456-recorder
 ```
@@ -45,6 +46,7 @@ cd raspberry-pi5-d456-recorder
 The build script installs compiler dependencies, clones librealsense `v2.59.2`, configures the RSUSB backend and Python bindings, builds the SDK, installs the udev rules, and installs the resulting libraries.
 
 ```bash
+cd ~/raspberry-pi5-d456-recorder
 chmod +x scripts/build_librealsense.sh
 ./scripts/build_librealsense.sh
 ```
@@ -89,6 +91,7 @@ A single center depth value of `0.0 m` does not necessarily indicate a failure. 
 ## 5. Install the Recorder
 
 ```bash
+cd ~/raspberry-pi5-d456-recorder
 chmod +x scripts/install_recorder.sh
 ./scripts/install_recorder.sh
 ```
@@ -168,12 +171,29 @@ The first two commands should report `enabled` and `active`.
 To open a terminal and the `RealSense Depth` preview after graphical login:
 
 ```bash
-chmod +x scripts/enable_preview_autostart.sh scripts/run_preview.sh
-./scripts/enable_preview_autostart.sh
-sudo systemctl disable --now d456-monitor.service
+cd ~/raspberry-pi5-d456-recorder &&
+git pull --ff-only &&
+sudo systemctl disable --now d456-monitor.service &&
+bash scripts/enable_preview_autostart.sh
 ```
 
-Log out and back in, or reboot. The preview launcher refuses to start if the systemd recorder is active.
+The repository (`~/raspberry-pi5-d456-recorder`) and installed programs (`~/python_code`) are different directories. The `scripts/` directory belongs to the repository. The commands above work after a new SSH login or after the manual tests, regardless of the previous working directory. They update the preview launcher without rebuilding the SDK or replacing recorder settings.
+
+Use `sudo raspi-config` to select desktop boot and desktop automatic login if the windows should appear after power-on without manual login. This mode requires Raspberry Pi OS with a graphical desktop. Then log out and back in, or reboot. The preview launcher refuses to start if the systemd recorder is active.
+
+Check the generated entry before rebooting:
+
+```bash
+cat ~/.config/autostart/d456-recorder-preview.desktop
+```
+
+For the default installation it should contain `Exec=/bin/bash "/home/<username>/python_code/run_preview.sh"` and `Terminal=true`. To test immediately, open a terminal inside the graphical desktop and run:
+
+```bash
+bash ~/python_code/run_preview.sh
+```
+
+An SSH terminal does not display the graphical preview. If enabling autostart reports an error, resolve it before rebooting.
 
 ## 9. Firmware Compatibility
 

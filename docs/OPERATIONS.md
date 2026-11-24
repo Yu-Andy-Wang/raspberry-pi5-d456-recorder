@@ -84,20 +84,15 @@ When started by SSH or systemd without a graphical display, the recorder disable
 ## Desktop Preview Operation
 
 ```bash
-./scripts/enable_preview_autostart.sh
-sudo systemctl disable --now d456-monitor.service
+cd ~/raspberry-pi5-d456-recorder &&
+git pull --ff-only &&
+sudo systemctl disable --now d456-monitor.service &&
+bash scripts/enable_preview_autostart.sh
 ```
 
 After the next graphical login, the terminal and `RealSense Depth` window are displayed. Press `q` in the preview window or `Ctrl+C` in the terminal to stop safely.
 
-For an existing installation, switch modes with:
-
-```bash
-cd ~/raspberry-pi5-d456-recorder
-git pull --ff-only
-sudo systemctl disable --now d456-monitor.service
-bash scripts/enable_preview_autostart.sh
-```
+The repository (`~/raspberry-pi5-d456-recorder`) contains the setup scripts; `~/python_code` contains installed runtime files. The explicit `cd` above is required when following these steps from a fresh SSH session or after testing the installed recorder.
 
 The enable script updates the installed preview launcher without replacing recorder settings. Use `sudo raspi-config` to select desktop boot and desktop automatic login if the windows must appear after power-on without a manual login. This requires Raspberry Pi OS with a desktop environment. Reboot and connect to that desktop to see the terminal and preview. To test immediately, run `bash ~/python_code/run_preview.sh` in a terminal inside the graphical desktop.
 
@@ -124,6 +119,7 @@ sudo systemctl restart d456-monitor.service
 Stop the service, pull the new repository version, rerun the installer, and start the service again:
 
 ```bash
+cd ~/raspberry-pi5-d456-recorder
 sudo systemctl stop d456-monitor.service
 git pull --ff-only
 ./scripts/install_recorder.sh

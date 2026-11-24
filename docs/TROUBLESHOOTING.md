@@ -43,9 +43,15 @@ The program disables the D456 emitter while waiting for the next recording bound
 To use the visible preview, enable desktop mode and disable systemd mode:
 
 ```bash
-./scripts/enable_preview_autostart.sh
-sudo systemctl disable --now d456-monitor.service
+cd ~/raspberry-pi5-d456-recorder &&
+git pull --ff-only &&
+sudo systemctl disable --now d456-monitor.service &&
+bash scripts/enable_preview_autostart.sh
 ```
+
+## `scripts/enable_preview_autostart.sh: No such file or directory`
+
+The setup scripts are in `~/raspberry-pi5-d456-recorder/scripts`, not in the home directory or `~/python_code`. Run the complete command block above, including `cd` and `git pull --ff-only`. The pull also retrieves the latest launcher fixes. No SDK rebuild is needed for this switch.
 
 ## `Health status write failed`
 
